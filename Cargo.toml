@@ -1,0 +1,9 @@
+[package]
+name = "monarch"
+version = "0.1.0"
+authors = ["Jesus Bracho <jbrach347@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
