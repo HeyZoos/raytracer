@@ -1,3 +1,7 @@
+mod vec3;
+
+use crate::vec3::Vec3;
+
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::Path;
@@ -19,10 +23,11 @@ fn main() {
             let r = x as f32 / width as f32;
             let g = y as f32 / height as f32;
             let b = 0.2f32;
+            let color = Vec3(r, g, b);
 
-            let ir = (255.99 * r) as i32;
-            let ig = (255.99 * g) as i32;
-            let ib = (255.99 * b) as i32;
+            let ir = (255.99 * color.r()) as i32;
+            let ig = (255.99 * color.g()) as i32;
+            let ib = (255.99 * color.b()) as i32;
 
             writer
                 .write(format!("{} {} {}\n", ir, ig, ib).as_bytes())
