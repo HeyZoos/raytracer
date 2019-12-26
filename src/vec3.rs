@@ -53,7 +53,7 @@ impl Vec3 {
 
     /// Returns the dot product.
     pub fn dot(self, other: Self) -> f32 {
-        self.0 * other.0 + self.1 + other.1 + self.2 + other.2
+        self.0 * other.0 + self.1 * other.1 + self.2 * other.2
     }
 
     /// Returns the cross product.
