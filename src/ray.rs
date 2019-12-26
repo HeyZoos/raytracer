@@ -14,7 +14,7 @@ impl Ray {
     pub fn color(&self, world: &HitableList) -> Vec3 {
         let mut hit = Hit::new();
 
-        if world.hit(self, 0.0, std::f32::MAX, &mut hit) {
+        if world.hit(self, 0.0, std::f64::MAX, &mut hit) {
             Vec3(
                 hit.normal.x() + 1.0,
                 hit.normal.y() + 1.0,
@@ -27,13 +27,13 @@ impl Ray {
         }
     }
 
-    pub fn point_at(&self, time: f32) -> Vec3 {
+    pub fn point_at(&self, time: f64) -> Vec3 {
         self.origin + self.direction * time
     }
 }
 
 pub struct Hit {
-    pub t: f32,
+    pub t: f64,
     pub point: Vec3,
     pub normal: Vec3,
 }
@@ -49,5 +49,5 @@ impl Hit {
 }
 
 pub trait Hitable {
-    fn hit(&self, ray: &Ray, t_min: f32, t_max: f32, hit: &mut Hit) -> bool;
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit: &mut Hit) -> bool;
 }

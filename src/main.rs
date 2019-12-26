@@ -35,8 +35,8 @@ fn main() {
 
     for y in (0..height).rev() {
         for x in 0..width {
-            let u = x as f32 / width as f32;
-            let v = y as f32 / height as f32;
+            let u = x as f64 / width as f64;
+            let v = y as f64 / height as f64;
 
             let ray = Ray::new(origin, lower_left_corner + horizontal * u + vertical * v);
             let color = ray.color(&world);

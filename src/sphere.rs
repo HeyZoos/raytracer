@@ -3,17 +3,17 @@ use crate::vec3::Vec3;
 
 pub struct Sphere {
     pub center: Vec3,
-    pub radius: f32,
+    pub radius: f64,
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f32) -> Self {
+    pub fn new(center: Vec3, radius: f64) -> Self {
         Self { center, radius }
     }
 }
 
 impl Hitable for Sphere {
-    fn hit(&self, ray: &Ray, t_min: f32, t_max: f32, hit: &mut Hit) -> bool {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit: &mut Hit) -> bool {
         let oc = ray.origin - self.center;
         let a = ray.direction.dot(ray.direction);
         let b = oc.dot(ray.direction) * 2.0;

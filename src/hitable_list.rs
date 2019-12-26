@@ -1,7 +1,7 @@
 use crate::ray::{Hit, Hitable, Ray};
 
 impl Hitable for Vec<Box<dyn Hitable>> {
-    fn hit(&self, ray: &Ray, t_min: f32, t_max: f32, hit: &mut Hit) -> bool {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit: &mut Hit) -> bool {
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
 
