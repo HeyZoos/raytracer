@@ -64,6 +64,16 @@ impl Vec3 {
             self.0 * other.1 - self.1 * other.0,
         )
     }
+
+    /// Creates a vector with all values initialized to 0.0.
+    pub fn zero() -> Self {
+        Vec3(0.0, 0.0, 0.0)
+    }
+
+    /// Creates a vector with all values initialized to 1.0.
+    pub fn one() -> Self {
+        Vec3(1.0, 1.0, 1.0)
+    }
 }
 
 impl Add for Vec3 {
@@ -127,6 +137,14 @@ impl Mul<f32> for Vec3 {
 
     fn mul(self, scalar: f32) -> Self::Output {
         Vec3(self.0 * scalar, self.1 * scalar, self.2 * scalar)
+    }
+}
+
+impl Mul<Vec3> for f32 {
+    type Output = Vec3;
+
+    fn mul(self, vector: Vec3) -> Self::Output {
+        vector * self
     }
 }
 

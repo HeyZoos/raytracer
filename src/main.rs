@@ -1,7 +1,11 @@
+mod hitable_list;
 mod ray;
+mod sphere;
 mod vec3;
 
+use crate::hitable_list::HitableList;
 use crate::ray::Ray;
+use crate::sphere::Sphere;
 use crate::vec3::Vec3;
 
 use std::fs::File;
@@ -21,6 +25,10 @@ fn main() {
     let vertical = Vec3(0.0, 2.0, 0.0);
     let origin = Vec3(0.0, 0.0, 0.0);
 
+    let mut world = HitableList::new();
+    world.push(Box::new(Sphere::new(Vec3(0.0, 0.0, -1.0), 0.5)));
+    world.push(Box::new(Sphere::new(Vec3(0.0, -100.5, -1.0), 100.0)));
+
     writer
         .write(format!("P3\n{} {}\n255\n", width, height).as_bytes())
         .unwrap();
@@ -31,7 +39,7 @@ fn main() {
             let v = y as f32 / height as f32;
 
             let ray = Ray::new(origin, lower_left_corner + horizontal * u + vertical * v);
-            let color = ray.color();
+            let color = ray.color(&world);
 
             let ir = (255.99 * color.r()) as i32;
             let ig = (255.99 * color.g()) as i32;

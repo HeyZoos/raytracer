@@ -1,3 +1,4 @@
+use crate::hitable_list::HitableList;
 use crate::vec3::Vec3;
 
 pub struct Ray {
@@ -10,34 +11,43 @@ impl Ray {
         Ray { origin, direction }
     }
 
-    pub fn color(&self) -> Vec3 {
-        let t = self.hit_sphere(Vec3(0.0, 0.0, -1.0), 0.5);
+    pub fn color(&self, world: &HitableList) -> Vec3 {
+        let mut hit = Hit::new();
 
-        if t > 0.0 {
-            let normal = (self.point_at(t) - Vec3(0.0, 0.0, -1.0)).norm();
-            Vec3(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0) * 0.5
+        if world.hit(self, 0.0, std::f32::MAX, &mut hit) {
+            Vec3(
+                hit.normal.x() + 1.0,
+                hit.normal.y() + 1.0,
+                hit.normal.z() + 1.0,
+            ) * 0.5
         } else {
-            let direction = self.direction.norm();
-            let time = 0.5 * (direction.y() + 1.0);
-            Vec3(1.0, 1.0, 1.0) * (1.0 - time) + Vec3(0.5, 0.7, 1.0) * time
-        }
-    }
-
-    pub fn hit_sphere(&self, center: Vec3, radius: f32) -> f32 {
-        let oc = self.origin - center;
-        let a = self.direction.dot(self.direction);
-        let b = oc.dot(self.direction) * 2.0;
-        let c = oc.dot(oc) - radius * radius;
-        let discriminant = b * b - 4.0 * a * c;
-
-        if discriminant < 0.0 {
-            -1.0
-        } else {
-            (-b - discriminant.sqrt()) / (2.0 * a)
+            let unit_direction = self.direction.norm();
+            let t = 0.5 * (unit_direction.y() + 1.0);
+            (1.0 - t) * Vec3::one() + t * Vec3(0.5, 0.7, 1.0)
         }
     }
 
     pub fn point_at(&self, time: f32) -> Vec3 {
         self.origin + self.direction * time
     }
+}
+
+pub struct Hit {
+    pub t: f32,
+    pub point: Vec3,
+    pub normal: Vec3,
+}
+
+impl Hit {
+    pub fn new() -> Self {
+        Hit {
+            t: 0.0,
+            point: Vec3::zero(),
+            normal: Vec3::zero(),
+        }
+    }
+}
+
+pub trait Hitable {
+    fn hit(&self, ray: &Ray, t_min: f32, t_max: f32, hit: &mut Hit) -> bool;
 }
