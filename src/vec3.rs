@@ -1,5 +1,6 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
+#[derive(Clone, Copy)]
 pub struct Vec3(pub f32, pub f32, pub f32);
 
 impl Vec3 {
