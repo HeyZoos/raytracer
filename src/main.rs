@@ -1,4 +1,5 @@
 mod hitable_list;
+mod random;
 mod ray;
 mod sphere;
 mod vec3;
