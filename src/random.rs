@@ -40,7 +40,7 @@ impl Random {
     }
 
     /// Returns the next real number between bounded between `min` and `max`.
-    pub fn range(&mut self, min: f64, max: f64) -> f64 {
+    pub fn _range(&mut self, min: f64, max: f64) -> f64 {
         self.next() * (max - min) + min
     }
 }
@@ -67,11 +67,11 @@ mod tests {
     #[test]
     fn range() {
         let mut random = Random::new();
-        let mut sample = random.range(-3.0, 0.0);
+        let mut sample = random._range(-3.0, 0.0);
         let mut last_sample = sample;
 
         for _ in 0..1000 {
-            sample = random.range(-3.0, 0.0);
+            sample = random._range(-3.0, 0.0);
             assert_ne!(last_sample, sample);
             assert!(sample < 0.0);
             assert!(sample > -3.0);
