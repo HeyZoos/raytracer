@@ -1,3 +1,5 @@
+use crate::vec3::Vec3;
+use rand::random;
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::u64;
 
@@ -42,6 +44,16 @@ impl Random {
     /// Returns the next real number between bounded between `min` and `max`.
     pub fn _range(&mut self, min: f64, max: f64) -> f64 {
         self.next() * (max - min) + min
+    }
+
+    pub fn in_unit_sphere(&mut self) -> Vec3 {
+        loop {
+            let point = 2.0 * Vec3(random(), random(), random()) - Vec3::one();
+
+            if point.sqlen() < 1.0 {
+                return point;
+            }
+        }
     }
 }
 

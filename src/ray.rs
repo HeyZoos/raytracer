@@ -1,4 +1,6 @@
 use crate::hitable_list::HitableList;
+use crate::material::Material;
+use crate::random::Random;
 use crate::vec3::Vec3;
 
 pub struct Ray {
@@ -14,12 +16,9 @@ impl Ray {
     pub fn color(&self, world: &HitableList) -> Vec3 {
         let mut hit = Hit::new();
 
-        if world.hit(self, 0.0, std::f64::MAX, &mut hit) {
-            Vec3(
-                hit.normal.x() + 1.0,
-                hit.normal.y() + 1.0,
-                hit.normal.z() + 1.0,
-            ) * 0.5
+        if world.hit(self, 0.001, std::f64::MAX, &mut hit) {
+            let target = hit.point + hit.normal + Random::new().in_unit_sphere();
+            0.5 * Ray::new(hit.point, target - hit.point).color(world) // todo(heyzoos): This makes it take a long time
         } else {
             let unit_direction = self.direction.norm();
             let t = 0.5 * (unit_direction.y() + 1.0);
@@ -36,6 +35,7 @@ pub struct Hit {
     pub t: f64,
     pub point: Vec3,
     pub normal: Vec3,
+    pub material: Option<Box<dyn Material>>,
 }
 
 impl Hit {
@@ -44,6 +44,7 @@ impl Hit {
             t: 0.0,
             point: Vec3::zero(),
             normal: Vec3::zero(),
+            material: None,
         }
     }
 }

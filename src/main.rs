@@ -1,5 +1,6 @@
 mod camera;
 mod hitable_list;
+mod material;
 mod random;
 mod ray;
 mod sphere;
@@ -48,6 +49,7 @@ fn main() {
             }
 
             color /= ns as f64;
+            color = Vec3(color.r().sqrt(), color.g().sqrt(), color.b().sqrt());
 
             let ir = (255.99 * color.r()) as i64;
             let ig = (255.99 * color.g()) as i64;
