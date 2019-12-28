@@ -39,9 +39,9 @@ fn main() {
         for x in 0..nx {
             let mut color = Vec3::zero();
 
-            for _s in 0..ns {
-                let u = x as f64 + random.next() / nx as f64;
-                let v = y as f64 + random.next() / ny as f64;
+            for _ in 0..ns {
+                let u = (x as f64 + random.next()) / nx as f64;
+                let v = (y as f64 + random.next()) / ny as f64;
                 let ray = camera.get_ray(u, v);
                 let _point = ray.point_at(2.0);
                 color += ray.color(&world);
