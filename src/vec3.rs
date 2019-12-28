@@ -1,6 +1,6 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vec3(pub f64, pub f64, pub f64);
 
 impl Vec3 {
@@ -60,7 +60,7 @@ impl Vec3 {
     pub fn cross(self, other: Self) -> Self {
         Vec3(
             self.1 * other.2 - self.2 * other.1,
-            -(self.0 * other.2 - self.1 * other.0),
+            self.2 * other.0 - self.0 * other.2,
             self.0 * other.1 - self.1 * other.0,
         )
     }
@@ -177,5 +177,21 @@ impl SubAssign for Vec3 {
         self.0 -= rhs.0;
         self.1 -= rhs.1;
         self.2 -= rhs.2;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Vec3;
+
+    #[test]
+    fn cross() {
+        let v1 = Vec3(2.0, 3.0, 4.0);
+        let v2 = Vec3(5.0, 6.0, 7.0);
+        let result = v1.cross(v2);
+
+        assert_eq!(-3.0, result.x());
+        assert_eq!(6.0, result.y());
+        assert_eq!(-3.0, result.z());
     }
 }
