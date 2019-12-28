@@ -1,14 +1,22 @@
+use crate::material::Material;
 use crate::ray::{Hit, Hitable, Ray};
 use crate::vec3::Vec3;
+
+use std::rc::Rc;
 
 pub struct Sphere {
     pub center: Vec3,
     pub radius: f64,
+    pub material: Rc<dyn Material>,
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f64) -> Self {
-        Self { center, radius }
+    pub fn new(center: Vec3, radius: f64, material: Rc<dyn Material>) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 }
 
@@ -27,6 +35,7 @@ impl Hitable for Sphere {
                 hit.t = temp;
                 hit.point = ray.point_at(hit.t);
                 hit.normal = (hit.point - self.center) / self.radius;
+                hit.material = Some(self.material.clone());
                 return true;
             }
 

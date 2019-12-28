@@ -7,6 +7,8 @@ mod vec3;
 
 use crate::camera::Camera;
 use crate::hitable_list::HitableList;
+use crate::material::{Lambertian, Metal};
+use crate::ray::Ray;
 use crate::sphere::Sphere;
 use crate::vec3::Vec3;
 
@@ -14,6 +16,7 @@ use rand::random;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::Path;
+use std::rc::Rc;
 
 fn main() {
     let path = Path::new("out.ppm");
@@ -25,8 +28,38 @@ fn main() {
     let ns = 100;
 
     let mut world = HitableList::new();
-    world.push(Box::new(Sphere::new(Vec3(0.0, 0.0, -1.0), 0.5)));
-    world.push(Box::new(Sphere::new(Vec3(0.0, -100.5, -1.0), 100.0)));
+
+    world.push(Box::new(Sphere::new(
+        Vec3(0.0, 0.0, -1.0),
+        0.5,
+        Rc::new(Lambertian {
+            albedo: Vec3(0.8, 0.3, 0.3),
+        }),
+    )));
+
+    world.push(Box::new(Sphere::new(
+        Vec3(0.0, -100.5, -1.0),
+        100.0,
+        Rc::new(Lambertian {
+            albedo: Vec3(0.8, 0.8, 0.0),
+        }),
+    )));
+
+    world.push(Box::new(Sphere::new(
+        Vec3(1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(Metal {
+            albedo: Vec3(0.8, 0.6, 0.2),
+        }),
+    )));
+
+    world.push(Box::new(Sphere::new(
+        Vec3(-1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(Metal {
+            albedo: Vec3(0.8, 0.8, 0.8),
+        }),
+    )));
 
     let camera = Camera::new();
 
@@ -43,7 +76,7 @@ fn main() {
                 let v = (y as f64 + random::<f64>()) / ny as f64;
                 let ray = camera.get_ray(u, v);
                 let _point = ray.point_at(2.0);
-                color += ray.color(&world);
+                color += Ray::color(&ray, &world, 0);
             }
 
             color /= ns as f64;

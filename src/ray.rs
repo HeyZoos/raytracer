@@ -2,7 +2,7 @@ use crate::hitable_list::HitableList;
 use crate::material::Material;
 use crate::vec3::Vec3;
 
-use rand::random;
+use std::rc::Rc;
 
 pub struct Ray {
     pub origin: Vec3,
@@ -14,14 +14,26 @@ impl Ray {
         Ray { origin, direction }
     }
 
-    pub fn color(&self, world: &HitableList) -> Vec3 {
+    pub fn color(ray: &Ray, world: &HitableList, depth: i64) -> Vec3 {
         let mut hit = Hit::new();
 
-        if world.hit(self, 0.001, std::f64::MAX, &mut hit) {
-            let target = hit.point + hit.normal + in_unit_sphere();
-            0.5 * Ray::new(hit.point, target - hit.point).color(world) // todo(heyzoos): This makes it take a long time
+        if world.hit(ray, 0.001, std::f64::MAX, &mut hit) {
+            let mut scattered = Ray::new(Vec3::zero(), Vec3::zero());
+            let mut attenuation = Vec3::zero();
+            let mut clone = hit.clone();
+
+            if depth < 50
+                && hit
+                    .material
+                    .unwrap()
+                    .scatter(ray, &mut clone, &mut attenuation, &mut scattered)
+            {
+                attenuation * Ray::color(&scattered, world, depth + 1)
+            } else {
+                Vec3::zero()
+            }
         } else {
-            let unit_direction = self.direction.norm();
+            let unit_direction = ray.direction.norm();
             let t = 0.5 * (unit_direction.y() + 1.0);
             (1.0 - t) * Vec3::one() + t * Vec3(0.5, 0.7, 1.0)
         }
@@ -32,11 +44,12 @@ impl Ray {
     }
 }
 
+#[derive(Clone)]
 pub struct Hit {
     pub t: f64,
     pub point: Vec3,
     pub normal: Vec3,
-    pub material: Option<Box<dyn Material>>,
+    pub material: Option<Rc<dyn Material>>,
 }
 
 impl Hit {
@@ -52,13 +65,4 @@ impl Hit {
 
 pub trait Hitable {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit: &mut Hit) -> bool;
-}
-
-fn in_unit_sphere() -> Vec3 {
-    loop {
-        let point = 2.0 * Vec3(random(), random(), random()) - Vec3::one();
-        if point.sqlen() < 1.0 {
-            return point;
-        }
-    }
 }
