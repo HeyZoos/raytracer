@@ -49,9 +49,9 @@ fn main() {
 
             color /= ns as f64;
 
-            let ir = (255.99 * color.r()) as i32;
-            let ig = (255.99 * color.g()) as i32;
-            let ib = (255.99 * color.b()) as i32;
+            let ir = (255.99 * color.r()) as i64;
+            let ig = (255.99 * color.g()) as i64;
+            let ib = (255.99 * color.b()) as i64;
 
             writer
                 .write(format!("{} {} {}\n", ir, ig, ib).as_bytes())

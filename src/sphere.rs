@@ -16,9 +16,9 @@ impl Hitable for Sphere {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, hit: &mut Hit) -> bool {
         let oc = ray.origin - self.center;
         let a = ray.direction.dot(ray.direction);
-        let b = oc.dot(ray.direction) * 2.0;
+        let b = oc.dot(ray.direction);
         let c = oc.dot(oc) - self.radius * self.radius;
-        let discriminant = b * b - 4.0 * a * c;
+        let discriminant = b * b - a * c;
 
         if discriminant > 0.0 {
             let mut temp = (-b - (b * b - a * c).sqrt()) / a;
