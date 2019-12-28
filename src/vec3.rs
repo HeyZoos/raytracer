@@ -185,11 +185,17 @@ mod tests {
     use super::Vec3;
 
     #[test]
+    fn dot() {
+        let v1 = Vec3(2.0, 3.0, 4.0);
+        let v2 = Vec3(5.0, 6.0, 7.0);
+        assert_eq!(56.0, v1.dot(v2));
+    }
+
+    #[test]
     fn cross() {
         let v1 = Vec3(2.0, 3.0, 4.0);
         let v2 = Vec3(5.0, 6.0, 7.0);
         let result = v1.cross(v2);
-
         assert_eq!(-3.0, result.x());
         assert_eq!(6.0, result.y());
         assert_eq!(-3.0, result.z());
