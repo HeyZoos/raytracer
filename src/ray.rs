@@ -22,13 +22,13 @@ impl Ray {
             let mut attenuation = Vec3::zero();
             let mut clone = hit.clone();
 
-            if depth < 50
-                && hit
-                    .material
-                    .unwrap()
-                    .scatter(ray, &mut clone, &mut attenuation, &mut scattered)
-            {
-                attenuation * Ray::color(&scattered, world, depth + 1)
+            if let Some(material) = hit.material {
+                if depth < 50 && material.scatter(ray, &mut clone, &mut attenuation, &mut scattered)
+                {
+                    attenuation * Ray::color(&scattered, world, depth + 1)
+                } else {
+                    Vec3::zero()
+                }
             } else {
                 Vec3::zero()
             }
