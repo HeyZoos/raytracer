@@ -1,5 +1,5 @@
 [package]
-name = "monarch"
+name = "raytracer"
 version = "0.1.0"
 authors = ["Jesus Bracho <jbrach347@gmail.com>"]
 edition = "2018"
